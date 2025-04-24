@@ -1,0 +1,187 @@
+/* Estilo geral da página */
+body,
+main {
+    font-family: 'Noto Serif', serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header */
+.cabecalho {
+    background-color: #E90287;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    width: 100%;
+    text-align: center;
+}
+
+.cabecalho h1 {
+    font-size: 24px;
+    color: #FFFFFF;
+}
+
+/* Cards Container */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-top: 53px;
+}
+
+/* Estilos dos cards */
+.card {
+    border-radius: 20px;
+    width: 200px;
+    height: 200px;
+    background-color: #E90287;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 20px;
+    padding: 10px;
+}
+
+.card img {
+    margin: 20px 0;
+}
+
+.card h2 {
+    font-size: 20px;
+}
+
+/* Espaçamento entre os elementos principais */
+#mensagem,
+.cards,
+#buttonRedirecionamento {
+    margin-top: 50px;
+}
+
+#mensagem {
+    display: flex;
+    text-align: center;
+}
+
+/* Estilização do botão de redirecionamento */
+#buttonRedirecionamento {
+    width: 250px;
+    height: 50px;
+    background-color: #E90287;
+    color: #FFFFFF;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+#buttonRedirecionamento:hover {
+    background-color: #780042; /* Hover com tom mais escuro */
+    transition: background-color 0.3s ease-in-out;
+}
+/* Fazendo o vídeo cobrir toda a tela */
+#video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;  /* Coloca o vídeo sobre os outros elementos da página */
+    display: none;  /* Vídeo está oculto inicialmente */
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);  /* Adiciona uma leve camada preta sobre o vídeo */
+}
+
+/* O vídeo ocupa toda a tela */
+#promo-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que o vídeo cubra toda a tela, mantendo a proporção */
+    object-position: center; /* Centraliza o vídeo na tela */
+}
+
+
+/* Responsividade */
+@media (max-width: 440px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+        width: 160px;
+        height: 160px;
+        font-size: 18px;
+    }
+
+    .card h2 {
+        font-size: 16px;
+    }
+
+    #buttonRedirecionamento {
+        width: 220px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 768px) {
+    .cabecalho h1 {
+        font-size: 28px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+        width: 220px;
+        height: 220px;
+        font-size: 24px;
+    }
+
+    .card h2 {
+        font-size: 22px;
+    }
+
+    #buttonRedirecionamento {
+        width: 270px;
+        height: 55px;
+        font-size: 22px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .cabecalho h1 {
+        font-size: 32px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+        width: 250px;
+        height: 250px;
+        font-size: 26px;
+    }
+
+    .card h2 {
+        font-size: 24px;
+    }
+
+    #buttonRedirecionamento {
+        width: 300px;
+        height: 60px;
+        font-size: 24px;
+    }
+}

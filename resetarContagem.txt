@@ -1,0 +1,25 @@
+✅ Para Conectar com o banco de dados neon 
+psql "postgresql://neondb_owner:npg_qs9kPrASbG8t@ep-gentle-hat-a6zuur4o-pooler.us-west-2.aws.neon.tech/neondb?sslmode=require"
+
+
+✅ Para resetar a contagem dos números, digite o comando abaixo:
+
+TRUNCATE TABLE participantes RESTART IDENTITY;
+
+Isso vai:
+✅ Apagar todos os registros da tabela participantes.
+✅ Resetar a numeração para que o próximo número comece em 1 novamente.
+
+Depois, para confirmar que a tabela está vazia, rode:
+
+SELECT * FROM participantes;
+
+Se não houver resultados, significa que a tabela foi limpa com sucesso.
+
+🔄 Para sair do psql, digite:
+
+\q
+
+Isso fecha a conexão com o banco e volta para o terminal normal.
+
+Agora a contagem está zerada!

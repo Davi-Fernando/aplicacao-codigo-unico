@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regras</title>
+    <!-- Link para a estilização -->
+    <link rel="stylesheet" href="styleTelaDeRegras.css">
+    <!-- Icone da página -->
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    <!-- Cabeçalho da página -->
+    <header class="cabecalho">
+        <h1>Regras</h1>
+    </header>
+
+    <main>
+        <!-- Cards -->
+        <div class="cards">
+            <div class="card" id="seguir">
+                SIGA A LOJA
+                <img src="../img/instagram (1).png" alt="Ícone Instagram" width="50px" height="50px">
+                <h2>@princesacenter</h2>
+            </div>
+            <div class="card" id="curtir">
+                CURTIR
+                <img src="../img/icon curtir.png" alt="Ícone Curtir" width="50px" height="50px">
+                O ÚLTIMO VÍDEO
+            </div>
+            <div class="card" id="compartilhar">
+                COMPARTILHAR
+                <img src="../img/compartilhar (1).png" alt="Ícone Compartilhar" width="50px" height="50px">
+                O ÚLTIMO VÍDEO
+            </div>
+            <div class="card" id="comentar">
+                COMENTAR
+                <img src="../img/bate-papo.png" alt="Ícone Bate-papo" width="50px" height="50px">
+                O ÚLTIMO VÍDEO
+
+            </div>
+
+        </div>
+
+        <div id="mensagem">
+            <h2>SIGA AS REGRAS E MOSTRE<br>
+                ESSE CARD NA LOJA<br>
+                PRINCESA CENTER.</h2>
+        </div>
+        <!-- Redirecionamento do usuário para a tela de prêmio -->
+        
+        <button id="buttonRedirecionamento" aria-label="Clique aqui para redirecionar para o card" onclick="redirecionar()">
+            CLIQUE AQUI
+        </button>
+
+        <!-- Vídeo oculto inicialmente -->
+        <div id="video-container" style="display: none;">
+            <video id="promo-video" width="100%" height="auto" controls>
+                <source src="seu-video.mp4" type="video/mp4">
+                Seu navegador não suporta vídeos.
+            </video>
+        </div>
+    </main>
+
+    <script>
+        // Redireciona para a tela de prêmio
+        async function redirecionar() {
+            window.location.href = "telaDoPremio.html";
+        };
+    </script>
+
+</body>
+
+</html>

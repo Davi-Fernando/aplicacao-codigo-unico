@@ -1,0 +1,4 @@
+TRUNCATE TABLE resgates RESTART IDENTITY;
+Content-Type
+application/json
+http://localhost:3000/claim

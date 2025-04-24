@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parabéns</title>
+    <link rel="stylesheet" href="styleTelaDoPremio.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    <!-- Vídeo dos confetes que será exibido na tela de prêmio -->
+    <div id="video-container" style="display: none;">
+        <video id="congratulations-video" autoplay muted playsinline>
+            <source src="../videos/congratulations-7600.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos.
+        </video>
+    </div>
+
+    <main>
+
+        <div id="cabecalho-img">
+            <img src="../img/Header page (1).png" alt="">
+        </div>
+
+        <div id="mensagem-premio">
+            <h2>VOCÊ ACABA DE<br>GANHAR</h2>
+            <h1 id="porcentagem-desconto">10%</h1>
+            <h2>DE DESCONTO<br>EM QUALQUER<br>PRODUTO DA LOJA.</h2>
+        </div>
+
+        <div id="area-resultado">
+            <h2>SEU NÚMERO É:</h1>
+                <h2 id="numero-sorteado"></h2>
+        </div>
+
+    </main>
+
+    <script>
+        async function buscarNumero() {
+            try {
+                const resposta = await fetch("http://localhost:3000/claim", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    document.getElementById("numero-sorteado").textContent = dados.numero;
+                } else {
+                    document.getElementById("numero-sorteado").textContent = dados.message;
+                }
+            } catch (erro) {
+                console.error("Erro ao buscar número:", erro);
+                document.getElementById("numero-sorteado").textContent = "Erro ao obter número.";
+            }
+        }
+        // Função para mostrar o vídeo de "parabéns" ao carregar a página
+        window.onload = function () {
+            const videoContainer = document.getElementById("video-container");
+            const video = document.getElementById("congratulations-video");
+
+            if (video && videoContainer) {
+                videoContainer.style.display = "flex"; // Mostra o vídeo
+                video.play();
+
+                video.onended = function () {
+                    // Adiciona classe que suaviza a opacidade
+                    videoContainer.classList.add("escondido");
+
+                    // Após a transição, oculta completamente
+                    setTimeout(() => {
+                        videoContainer.style.display = "none";
+                        videoContainer.classList.remove("escondido"); // reseta para futuro uso
+                    }, 1000); // mesmo tempo da transição no CSS
+                };
+            }
+
+            buscarNumero();
+        };
+
+
+    </script>
+
+
+</body>
+
+</html>
