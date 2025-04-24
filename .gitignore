@@ -1,9 +1,12 @@
-# Ignorar arquivos de configuração local e dependências
+# Ignorar dependências e variáveis de ambiente
 node_modules/
 .env
-package.json
-# Ignorar arquivos do VS Code
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de configuração do VS Code
 .vscode/
 
-# Ignorar arquivos de logs
-*.log
+# (opcional) Ignorar o arquivo de lock do npm
+# package-lock.json
