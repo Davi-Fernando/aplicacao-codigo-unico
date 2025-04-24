@@ -6,7 +6,7 @@ node_modules/
 *.log
 
 # Ignorar arquivos de configuração do VS Code
-.vscode/
-
+/.vscode/
+.DS_Store
 # (opcional) Ignorar o arquivo de lock do npm
 # package-lock.json
