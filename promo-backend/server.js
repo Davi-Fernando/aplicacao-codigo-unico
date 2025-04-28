@@ -12,8 +12,16 @@ const corsOptions = {
     origin: '*',
     methods: 'GET, POST',
     allowedHeaders: 'Content-Type',
+    credentials: true,  // Permitir envio de cookies
+    exposedHeaders: ['Access-Control-Allow-Private-Network'],  // Expor o cabeçalho
 };
 app.use(cors(corsOptions));
+
+// Depois, para as requisições OPTIONS (preflight), adicione:
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Private-Network', 'true');
+    res.send();
+});
 
 app.use(express.json());
 app.use(cookieParser());  // Usando o cookie-parser para lidar com cookies
