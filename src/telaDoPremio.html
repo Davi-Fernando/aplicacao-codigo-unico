@@ -32,17 +32,49 @@
 
         <div id="area-resultado">
             <h1>SEU NÚMERO É:</h1>
-                <h1 id="numero-sorteado"></h1>
+            <h1 id="numero-sorteado"></h1>
         </div>
 
     </main>
 
     <script>
+        // Função para gerar um UUID (v4)
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Função para obter o UUID do cookie, ou criar um novo se não existir
+        function getOrCreateUUID() {
+            let uuid = getCookie('user_uuid');
+            if (!uuid) {
+                uuid = generateUUID();
+                document.cookie = `user_uuid=${uuid}; path=/; max-age=31536000`; // Armazena o UUID por 1 ano
+            }
+            return uuid;
+        }
+
+        // Função para obter o valor de um cookie pelo nome
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Função para buscar o número e exibir na tela
         async function buscarNumero() {
+            const uuid = getOrCreateUUID(); // Obtemos o UUID ou criamos um novo
+
             try {
                 const resposta = await fetch("http://localhost:3000/claim", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ uuid: uuid })  // Envia o UUID no corpo da requisição
                 });
 
                 const dados = await resposta.json();
