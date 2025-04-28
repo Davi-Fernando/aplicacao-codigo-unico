@@ -3,28 +3,29 @@ const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 const cookieParser = require("cookie-parser");
-const { v4: uuidv4 } = require("uuid");  // Importando o uuid
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 
 // Configurações do CORS
 const corsOptions = {
-    origin: 'https://promo-princesa-center.netlify.app',
-    methods: 'GET, POST',
-    allowedHeaders: 'Content-Type',
-    credentials: true,  // Permitir envio de cookies
-    exposedHeaders: ['Access-Control-Allow-Private-Network'],  // Expor o cabeçalho
+    origin: 'https://promo-princesa-center.netlify.app',  // Domínio correto do frontend
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,  // Permite envio de cookies
+    exposedHeaders: ['Access-Control-Allow-Private-Network'],
 };
 app.use(cors(corsOptions));
 
-// Depois, para as requisições OPTIONS (preflight), adicione:
+// Para as requisições OPTIONS (preflight)
 app.options('*', (req, res) => {
     res.header('Access-Control-Allow-Private-Network', 'true');
-    res.send();
+    res.sendStatus(200);
 });
 
+// Middlewares
 app.use(express.json());
-app.use(cookieParser());  // Usando o cookie-parser para lidar com cookies
+app.use(cookieParser());
 
 // Configuração do PostgreSQL
 const pool = new Pool({
@@ -32,7 +33,7 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false },
 });
 
-// Criando a tabela (apenas uma vez)
+// Função para criar a tabela, se não existir
 async function setupDatabase() {
     try {
         await pool.query(`
@@ -49,44 +50,55 @@ async function setupDatabase() {
 }
 setupDatabase();
 
+// Endpoint principal
 app.post("/claim", async (req, res) => {
     try {
-        // Obter o session_id a partir do cookie ou gerar um novo
         let sessionId = req.cookies.session_id;
-        
+
         if (!sessionId) {
-            sessionId = uuidv4();  // Gerar um UUID novo se não houver no cookie
-            res.cookie("session_id", sessionId, { httpOnly: true, maxAge: 3600000 });  // Armazenando o UUID no cookie por 1 hora
+            sessionId = uuidv4();  // Gera novo UUID
+            res.cookie("session_id", sessionId, { 
+                httpOnly: true, 
+                secure: true, 
+                sameSite: 'Lax'
+            });
         }
 
-        // Verificando se o session_id já existe no banco de dados
-        const { rows: usuarioExistente } = await pool.query("SELECT numero FROM participantes WHERE session_id = $1", [sessionId]);
+        // Verifica se já existe
+        const { rows: usuarioExistente } = await pool.query(
+            "SELECT numero FROM participantes WHERE session_id = $1", 
+            [sessionId]
+        );
 
         if (usuarioExistente.length > 0) {
-            // Se o usuário já tem um número, retorna apenas o número
             return res.json({ numero: usuarioExistente[0].numero });
         }
 
-        // Verificando se ainda há números disponíveis
-        const { rowCount } = await pool.query("SELECT * FROM participantes");
+        // Limite de 500 participantes
+        const { rowCount } = await pool.query("SELECT 1 FROM participantes");
         if (rowCount >= 500) {
-            return res.status(403).json({ message: "Promoção encerrada. Limite atingido!" });
+            return res.status(403).json({ message: "Promoção encerrada. Limite de participantes atingido." });
         }
 
-        // Obtém o próximo número
-        const { rows } = await pool.query("SELECT COALESCE(MAX(numero), 0) + 1 AS proximo_numero FROM participantes");
+        // Próximo número
+        const { rows } = await pool.query(
+            "SELECT COALESCE(MAX(numero), 0) + 1 AS proximo_numero FROM participantes"
+        );
         const proximoNumero = rows[0].proximo_numero;
 
-        // Inserindo o número no banco junto com o session_id
-        await pool.query("INSERT INTO participantes (numero, session_id) VALUES ($1, $2)", [proximoNumero, sessionId]);
+        // Salva no banco
+        await pool.query(
+            "INSERT INTO participantes (numero, session_id) VALUES ($1, $2)", 
+            [proximoNumero, sessionId]
+        );
 
-        res.json({ numero: proximoNumero });
+        return res.json({ numero: proximoNumero });
     } catch (error) {
-        console.error("Erro no /claim:", error);
-        res.status(500).json({ message: "Erro no servidor. Tente novamente." });
+        console.error("Erro no /claim:", error.message || error);
+        res.status(500).json({ message: "Erro interno no servidor. Tente novamente mais tarde." });
     }
 });
 
 // Iniciando o servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
