@@ -9,7 +9,7 @@ const app = express();
 
 // Configurações do CORS
 const corsOptions = {
-    origin: '*',
+    origin: 'https://promo-princesa-center.netlify.app',
     methods: 'GET, POST',
     allowedHeaders: 'Content-Type',
     credentials: true,  // Permitir envio de cookies
