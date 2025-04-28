@@ -69,7 +69,7 @@
             const uuid = getOrCreateUUID(); // Obtemos o UUID ou criamos um novo
 
             try {
-                const resposta = await fetch("http://localhost:3000/claim", {
+                const resposta = await fetch("aplicacao-codigo-unico-production.up.railway.app/claim", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
